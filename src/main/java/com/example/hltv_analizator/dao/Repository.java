@@ -11,6 +11,7 @@ import com.example.hltv_analizator.entity.PlayerAchievement;
 import com.example.hltv_analizator.entity.PlayoffRatingPlayer;
 import com.example.hltv_analizator.entity.PointsAchievement;
 import com.example.hltv_analizator.entity.RatingPlayer;
+import com.example.hltv_analizator.entity.Result;
 import com.example.hltv_analizator.entity.TierTournament;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
@@ -401,6 +402,14 @@ public class Repository {
         }
     }
 
+    public void saveResult(Result result) {
+        try (Session session = entityManager.unwrap(Session.class)) {
+            session.merge(result);
+        } catch (NoResultException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void savePlayoffRatingPlayer(PlayoffRatingPlayer playoffRatingPlayer) {
         try (Session session = entityManager.unwrap(Session.class)) {
             session.merge(playoffRatingPlayer);
@@ -608,6 +617,18 @@ public class Repository {
         }
     }
 
+    public Result getByIdResults(Integer hltv_id) {
+        try (Session session = entityManager.unwrap(Session.class)) {
+            return session.createQuery(
+                            "SELECT rp FROM Result rp JOIN rp.player_id p " +
+                                    "WHERE p.hltv_id = :hltv_id", Result.class)
+                    .setParameter("hltv_id", hltv_id)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
     public void updateRatingPlayer_tier1() {
         try (Session session = entityManager.unwrap(Session.class)) {
             List<Player> playerList = session.createQuery("FROM Player", Player.class)
@@ -650,6 +671,20 @@ public class Repository {
                 PlayoffRatingPlayer playoffRatingPlayer = new PlayoffRatingPlayer();
                 playoffRatingPlayer.setPlayer_id(player);
                 session.persist(playoffRatingPlayer);
+            }
+        } catch (NoResultException e) {
+            // Обработка ошибок
+        }
+    }
+
+    public void updateResult() {
+        try (Session session = entityManager.unwrap(Session.class)) {
+            List<Player> playerList = session.createQuery("FROM Player", Player.class)
+                    .getResultList();
+            for (Player player : playerList) {
+                Result result = new Result();
+                result.setPlayer_id(player);
+                session.persist(result);
             }
         } catch (NoResultException e) {
             // Обработка ошибок
@@ -938,6 +973,21 @@ public class Repository {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<Long> query = builder.createQuery(Long.class);
             query.select(builder.count(query.from(KprPlayer.class)));
+            Long count = session.createQuery(query).uniqueResult();
+
+            if(count == 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public boolean resultIsEmpty(){
+        try (Session session = entityManager.unwrap(Session.class)) {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Long> query = builder.createQuery(Long.class);
+            query.select(builder.count(query.from(Result.class)));
             Long count = session.createQuery(query).uniqueResult();
 
             if(count == 0) {
