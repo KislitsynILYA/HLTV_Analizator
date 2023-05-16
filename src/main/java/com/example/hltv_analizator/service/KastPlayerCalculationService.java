@@ -8,7 +8,6 @@
 //import lombok.Setter;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.stereotype.Service;
-//
 //import java.text.DecimalFormat;
 //import java.util.Arrays;
 //import java.util.List;
@@ -17,7 +16,6 @@
 //@AllArgsConstructor
 //@Setter
 //public class KastPlayerCalculationService {
-//
 //    @Autowired
 //    private Repository dao;
 //
@@ -26,7 +24,6 @@
 //        List<Double> allKast = dao.getAllKast();
 //        List<Integer> maps_numbs = dao.getAllMaps_numb();
 //        List<Integer> player_ids = dao.getAllPlayer_ids();
-//        DecimalFormat decimalFormat = new DecimalFormat("#.##");
 //        short category_id = 7;
 //        short tier_1_id = 1;
 //        short tier_2_id = 2;
@@ -35,64 +32,55 @@
 //        Parameter parameters_tier_1 = params.get(0);
 //        Parameter parameters_tier_2 = params.get(1);
 //        for (int i = 0; i < allKast.size(); i++){
-//            Double points_tier_1 = -1.00;
-//            Double coef_points_tier_1 = -1.00;
-//            Double points_tier_2 = -1.00;
-//            Double coef_points_tier_2 = -1.00;
 //            if (i % 2 == 0) {
-//                if (maps_numbs.get(i) < parameters_tier_1.getMin_maps_numb()) {
-//                    points_tier_1 = 0.00;
-//                    coef_points_tier_1 = 0.00;
-//                }
-//                else {
-//                    points_tier_1 = (allKast.get(i) - parameters_tier_1.getMin_stat())
-//                            * parameters_tier_1.getPoints() / (parameters_tier_1.getMax_stat()
-//                            - parameters_tier_1.getMin_stat());
-//
-//                    if (maps_numbs.get(i) > parameters_tier_1.getHigh_mediana()) {
-//                        coef_points_tier_1 = points_tier_1 * parameters_tier_1.getInc_coef();
-//                    }
-//                    else if (maps_numbs.get(i) <= parameters_tier_1.getLow_mediana()) {
-//                        coef_points_tier_1 = points_tier_1 * parameters_tier_1.getDec_coef();
-//                    }
-//                    else {
-//                        coef_points_tier_1 = points_tier_1 * parameters_tier_1.getCoef();
-//                    }
-//                }
-//                Double points_tier_1_res = Double.parseDouble((decimalFormat.format(points_tier_1).replace(",",".")));
-//                Double coef_points_tier_1_res = Double.parseDouble((decimalFormat.format(coef_points_tier_1).replace(",",".")));
-//                KastPlayer kastPlayer_tier_1 = dao.getByKastPlayer_Id_tier1(player_ids.get(i));
-//                kastPlayer_tier_1.setPoints(points_tier_1_res);
-//                kastPlayer_tier_1.setCoef_points(coef_points_tier_1_res);
-//                dao.saveKastPlayer(kastPlayer_tier_1);
+//                calculationPointsForKast(maps_numbs.get(i), parameters_tier_1,
+//                        allKast.get(i), player_ids.get(i), tier_1_id);
 //            }
 //            else {
-//                if (maps_numbs.get(i) < parameters_tier_2.getMin_maps_numb()) {
-//                    points_tier_2 = 0.00;
-//                    coef_points_tier_2 = 0.00;
-//                }
-//                else {
-//                    points_tier_2 = (allKast.get(i) - parameters_tier_2.getMin_stat())
-//                            * parameters_tier_2.getPoints() / (parameters_tier_2.getMax_stat()
-//                            - parameters_tier_2.getMin_stat());
-//
-//                    if (maps_numbs.get(i) > parameters_tier_2.getHigh_mediana()) {
-//                        coef_points_tier_2 = points_tier_2 * parameters_tier_2.getInc_coef();
-//                    }
-//                    else if (maps_numbs.get(i) <= parameters_tier_2.getLow_mediana()) {
-//                        coef_points_tier_2 = points_tier_2 * parameters_tier_2.getDec_coef();
-//                    }
-//                    else {
-//                        coef_points_tier_2 = points_tier_2 * parameters_tier_2.getCoef();
-//                    }
-//                }
-//                Double points_tier_2_res = Double.parseDouble((decimalFormat.format(points_tier_2).replace(",",".")));
-//                Double coef_points_tier_2_res = Double.parseDouble((decimalFormat.format(coef_points_tier_2).replace(",",".")));
-//                KastPlayer kastPlayer_tier_2 = dao.getByKastPlayer_Id_tier2(player_ids.get(i));
-//                kastPlayer_tier_2.setPoints(points_tier_2_res);
-//                kastPlayer_tier_2.setCoef_points(coef_points_tier_2_res);
-//                dao.saveKastPlayer(kastPlayer_tier_2);
+//                calculationPointsForKast(maps_numbs.get(i), parameters_tier_2,
+//                        allKast.get(i), player_ids.get(i), tier_2_id);
 //            }
+//        }
+//    }
+//
+//    void calculationPointsForKast(Integer maps_numb, Parameter parameters, Double kast, Integer player_id, short tier) {
+//
+//        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+//        Double points = -1.00;
+//        Double coef_points = -1.00;
+//
+//        if (maps_numb < parameters.getMin_maps_numb()) {
+//            points = 0.00;
+//            coef_points = 0.00;
+//        }
+//        else {
+//            points = ((kast - parameters.getMin_stat())
+//                    * parameters.getPoints()) / (parameters.getMax_stat()
+//                    - parameters.getMin_stat());
+//
+//            if (maps_numb > parameters.getHigh_mediana()) {
+//                coef_points = points * parameters.getInc_coef();
+//            }
+//            else if (maps_numb <= parameters.getLow_mediana()) {
+//                coef_points = points * parameters.getDec_coef();
+//            }
+//            else {
+//                coef_points = points * parameters.getCoef();
+//            }
+//        }
+//        Double points_res = Double.parseDouble((decimalFormat.format(points).replace(",",".")));
+//        Double coef_points_res = Double.parseDouble((decimalFormat.format(coef_points).replace(",",".")));
+//        if (tier == 1) {
+//            KastPlayer kastPlayer_tier_1 = dao.getByKastPlayer_Id_tier1(player_id);
+//            kastPlayer_tier_1.setPoints(points_res);
+//            kastPlayer_tier_1.setCoef_points(coef_points_res);
+//            dao.saveKastPlayer(kastPlayer_tier_1);
+//        }
+//        else {
+//            KastPlayer kastPlayer_tier_2 = dao.getByKastPlayer_Id_tier2(player_id);
+//            kastPlayer_tier_2.setPoints(points_res);
+//            kastPlayer_tier_2.setCoef_points(coef_points_res);
+//            dao.saveKastPlayer(kastPlayer_tier_2);
 //        }
 //    }
 //}

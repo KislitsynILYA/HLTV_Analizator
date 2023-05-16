@@ -79,6 +79,16 @@ public class Repository {
         }
     }
 
+    public List<Integer> getAllResult_ids() {
+        try (Session session = entityManager.unwrap(Session.class)) {
+            Query<Integer> query = session.createQuery("SELECT p.player_id.player_id FROM Result p " +
+                    "ORDER BY p.player_id.player_id", Integer.class);
+            return query.getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
     public RatingPlayer getByRatingPlayer_Id_tier1(Integer id_player) {
         try (Session session = entityManager.unwrap(Session.class)) {
             return session.createQuery(
@@ -108,6 +118,18 @@ public class Repository {
             return session.createQuery(
                             "SELECT rp FROM PlayoffRatingPlayer rp JOIN rp.player_id p " +
                                     "WHERE p.player_id = :id_player", PlayoffRatingPlayer.class)
+                    .setParameter("id_player", id_player)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    public Result getByResultPlayer_Id(Integer id_player) {
+        try (Session session = entityManager.unwrap(Session.class)) {
+            return session.createQuery(
+                            "SELECT rp FROM Result rp JOIN rp.player_id p " +
+                                    "WHERE p.player_id = :id_player", Result.class)
                     .setParameter("id_player", id_player)
                     .getSingleResult();
         } catch (NoResultException e) {
@@ -358,6 +380,18 @@ public class Repository {
         }
     }
 
+    public List<Result> getTop20Results() {
+        try (Session session = entityManager.unwrap(Session.class)) {
+            Query<Result> query = session.createQuery("SELECT p " +
+                    "FROM Result p " +
+                    "ORDER BY p.full_points desc", Result.class);
+            query.setMaxResults(20);
+            return query.getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
     public PointsAchievement getPointsAchievement() {
         try (Session session = entityManager.unwrap(Session.class)) {
             Query<PointsAchievement> query = session.createQuery("SELECT p " +
@@ -380,6 +414,16 @@ public class Repository {
     public List<Short> getAllTierId() {
         try (Session session = entityManager.unwrap(Session.class)) {
             Query<Short> query = session.createQuery("SELECT p.tier_id FROM TierTournament p", Short.class);
+            return query.getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    public List<Short> getAllCoef_Tier() {
+        try (Session session = entityManager.unwrap(Session.class)) {
+            Query<Short> query = session.createQuery("SELECT p.coef_tier FROM TierTournament p " +
+                    "ORDER BY p.tier_id", Short.class);
             return query.getResultList();
         } catch (NoResultException e) {
             return null;
