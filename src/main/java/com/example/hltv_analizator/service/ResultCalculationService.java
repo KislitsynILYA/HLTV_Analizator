@@ -71,4 +71,8 @@
 //        result_player.setFull_points(full_points);
 //        dao.saveResult(result_player);
 //    }
+//
+//    public List<Result> resultTOP20Calculation(){
+//        return dao.getTop20Results();
+//    }
 //}

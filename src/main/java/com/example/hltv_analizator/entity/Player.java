@@ -1,6 +1,5 @@
 package com.example.hltv_analizator.entity;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,8 +14,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
-
-
 
 @Getter
 @Setter
@@ -38,5 +35,4 @@ public class Player implements Serializable {
 
     @Column(name = "hltv_id")
     private Integer hltv_id;
-
 }

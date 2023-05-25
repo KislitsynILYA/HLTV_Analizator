@@ -27,7 +27,8 @@
 //        short category_id = 2;
 //        short tier_1_id = 1;
 //        short tier_2_id = 2;
-//        Parameter[] parameters = {dao.getParams(category_id, tier_1_id).get(0), dao.getParams(category_id, tier_2_id).get(0)};
+//        Parameter[] parameters = {dao.getParams(category_id, tier_1_id).get(0),
+//                dao.getParams(category_id, tier_2_id).get(0)};
 //        List<Parameter> params = Arrays.asList(parameters);
 //        Parameter parameters_tier_1 = params.get(0);
 //        Parameter parameters_tier_2 = params.get(1);

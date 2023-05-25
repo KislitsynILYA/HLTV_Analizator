@@ -430,85 +430,6 @@ public class Repository {
         }
     }
 
-    public void savePlayer(Player player) {
-        try (Session session = entityManager.unwrap(Session.class)) {
-            session.merge(player);
-        } catch (NoResultException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void saveRatingPlayer(RatingPlayer ratingPlayer) {
-        try (Session session = entityManager.unwrap(Session.class)) {
-                session.merge(ratingPlayer);
-        } catch (NoResultException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void saveResult(Result result) {
-        try (Session session = entityManager.unwrap(Session.class)) {
-            session.merge(result);
-        } catch (NoResultException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void savePlayoffRatingPlayer(PlayoffRatingPlayer playoffRatingPlayer) {
-        try (Session session = entityManager.unwrap(Session.class)) {
-            session.merge(playoffRatingPlayer);
-        } catch (NoResultException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void savePlayerAchievement(PlayerAchievement playerAchievement) {
-        try (Session session = entityManager.unwrap(Session.class)) {
-            session.merge(playerAchievement);
-        } catch (NoResultException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void saveAdrPlayer(AdrPlayer adrPlayer) {
-        try (Session session = entityManager.unwrap(Session.class)) {
-            session.merge(adrPlayer);
-        } catch (NoResultException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void saveDprPlayer(DprPlayer dprPlayer) {
-        try (Session session = entityManager.unwrap(Session.class)) {
-            session.merge(dprPlayer);
-        } catch (NoResultException e) {
-            e.printStackTrace();
-        }
-    }
-    public void saveImpactPlayer(ImpactPlayer impactPlayer) {
-        try (Session session = entityManager.unwrap(Session.class)) {
-            session.merge(impactPlayer);
-        } catch (NoResultException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void saveKastPlayer(KastPlayer kastPlayer) {
-        try (Session session = entityManager.unwrap(Session.class)) {
-            session.merge(kastPlayer);
-        } catch (NoResultException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void saveKprPlayer(KprPlayer kprPlayer) {
-        try (Session session = entityManager.unwrap(Session.class)) {
-            session.merge(kprPlayer);
-        } catch (NoResultException e) {
-            e.printStackTrace();
-        }
-    }
-
     public Player getById(Integer hltv_id) {
         try (Session session = entityManager.unwrap(Session.class)) {
             return session.createQuery("from Player where hltv_id = :hltv_id", Player.class)
@@ -521,8 +442,8 @@ public class Repository {
     public RatingPlayer getByIdRatingPlayer_tier1(Integer hltv_id) {
         try (Session session = entityManager.unwrap(Session.class)) {
             return session.createQuery(
-                    "SELECT rp FROM RatingPlayer rp JOIN rp.player_id p JOIN rp.tier_id t " +
-                            "WHERE p.hltv_id = :hltv_id AND t.tier_id = 1", RatingPlayer.class)
+                            "SELECT rp FROM RatingPlayer rp JOIN rp.player_id p JOIN rp.tier_id t " +
+                                    "WHERE p.hltv_id = :hltv_id AND t.tier_id = 1", RatingPlayer.class)
                     .setParameter("hltv_id", hltv_id)
                     .getSingleResult();
         } catch (NoResultException e) {
@@ -533,8 +454,8 @@ public class Repository {
     public RatingPlayer getByIdRatingPlayer_tier2(Integer hltv_id) {
         try (Session session = entityManager.unwrap(Session.class)) {
             return session.createQuery(
-                    "SELECT rp FROM RatingPlayer rp JOIN rp.player_id p JOIN rp.tier_id t " +
-                            "WHERE p.hltv_id = :hltv_id AND t.tier_id = 2", RatingPlayer.class)
+                            "SELECT rp FROM RatingPlayer rp JOIN rp.player_id p JOIN rp.tier_id t " +
+                                    "WHERE p.hltv_id = :hltv_id AND t.tier_id = 2", RatingPlayer.class)
                     .setParameter("hltv_id", hltv_id)
                     .getSingleResult();
         } catch (NoResultException e) {
@@ -670,6 +591,84 @@ public class Repository {
                     .getSingleResult();
         } catch (NoResultException e) {
             return null;
+        }
+    }
+    public void savePlayer(Player player) {
+        try (Session session = entityManager.unwrap(Session.class)) {
+            session.merge(player);
+        } catch (NoResultException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveRatingPlayer(RatingPlayer ratingPlayer) {
+        try (Session session = entityManager.unwrap(Session.class)) {
+                session.merge(ratingPlayer);
+        } catch (NoResultException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveResult(Result result) {
+        try (Session session = entityManager.unwrap(Session.class)) {
+            session.merge(result);
+        } catch (NoResultException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void savePlayoffRatingPlayer(PlayoffRatingPlayer playoffRatingPlayer) {
+        try (Session session = entityManager.unwrap(Session.class)) {
+            session.merge(playoffRatingPlayer);
+        } catch (NoResultException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void savePlayerAchievement(PlayerAchievement playerAchievement) {
+        try (Session session = entityManager.unwrap(Session.class)) {
+            session.merge(playerAchievement);
+        } catch (NoResultException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveAdrPlayer(AdrPlayer adrPlayer) {
+        try (Session session = entityManager.unwrap(Session.class)) {
+            session.merge(adrPlayer);
+        } catch (NoResultException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveDprPlayer(DprPlayer dprPlayer) {
+        try (Session session = entityManager.unwrap(Session.class)) {
+            session.merge(dprPlayer);
+        } catch (NoResultException e) {
+            e.printStackTrace();
+        }
+    }
+    public void saveImpactPlayer(ImpactPlayer impactPlayer) {
+        try (Session session = entityManager.unwrap(Session.class)) {
+            session.merge(impactPlayer);
+        } catch (NoResultException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveKastPlayer(KastPlayer kastPlayer) {
+        try (Session session = entityManager.unwrap(Session.class)) {
+            session.merge(kastPlayer);
+        } catch (NoResultException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveKprPlayer(KprPlayer kprPlayer) {
+        try (Session session = entityManager.unwrap(Session.class)) {
+            session.merge(kprPlayer);
+        } catch (NoResultException e) {
+            e.printStackTrace();
         }
     }
 
