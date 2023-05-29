@@ -42,7 +42,8 @@ public class Repository {
 
     public List<Integer> getAllHltvId() {
         try (Session session = entityManager.unwrap(Session.class)) {
-            Query<Integer> query = session.createQuery("SELECT p.hltv_id FROM Player p", Integer.class);
+            Query<Integer> query = session.createQuery("SELECT p.hltv_id FROM Player p " +
+                    "ORDER BY p.player_id", Integer.class);
             return query.getResultList();
         } catch (NoResultException e) {
             return null;
@@ -338,7 +339,7 @@ public class Repository {
     }
     public List<Integer> getAllMaps_numb() {
         try (Session session = entityManager.unwrap(Session.class)) {
-            Query<Integer> query = session.createQuery("SELECT p.maps_numb FROM RatingPlayer p " +
+            Query<Integer> query = session.createQuery("SELECT p.maps_numb FROM AdrPlayer p " +
                     "ORDER BY p.player_id.player_id, p.tier_id.tier_id", Integer.class);
             return query.getResultList();
         } catch (NoResultException e) {

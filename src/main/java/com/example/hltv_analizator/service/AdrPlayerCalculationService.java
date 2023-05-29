@@ -3,7 +3,6 @@ package com.example.hltv_analizator.service;
 import com.example.hltv_analizator.dao.Repository;
 import com.example.hltv_analizator.entity.AdrPlayer;
 import com.example.hltv_analizator.entity.Parameter;
-import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +15,10 @@ import java.util.List;
 @AllArgsConstructor
 @Setter
 public class AdrPlayerCalculationService {
+
     @Autowired
     private Repository dao;
 
-    @PostConstruct
     void startAdrPlayersCalculation(){
         List<Double> allAdr = dao.getAllAdr();
         List<Integer> maps_numbs = dao.getAllMaps_numb();
@@ -46,8 +45,8 @@ public class AdrPlayerCalculationService {
     void calculationPointsForAdr(Integer maps_numb, Parameter parameters, Double adr, Integer player_id, short tier) {
 
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
-        Double points = -1.00;
-        Double coef_points = -1.00;
+        Double points;
+        Double coef_points;
 
         if (maps_numb < parameters.getMin_maps_numb()) {
             points = 0.00;

@@ -2,7 +2,6 @@ package com.example.hltv_analizator.service;
 
 import com.example.hltv_analizator.dao.Repository;
 import com.example.hltv_analizator.entity.DprPlayer;
-import jakarta.annotation.PostConstruct;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jsoup.Jsoup;
@@ -24,6 +23,9 @@ public class DprPlayerService {
     @Autowired
     private Repository dao;
 
+    @Autowired
+    private DprPlayerCalculationService dprPlayerCalculationService;
+
     @Value("${trace.url_tier_1}")
     private String url_tier_1;
 
@@ -35,7 +37,7 @@ public class DprPlayerService {
 
     @Value("${trace.parse_dpr}")
     private String parse_dpr;
-    @PostConstruct
+
     void startDprPlayers() {
         if (dao.dprPlayerIsEmpty()) {
             dao.updateDprPlayer_tier1();
@@ -44,47 +46,43 @@ public class DprPlayerService {
         System.setProperty("webdriver.chrome.driver", "selenium\\chromedriver.exe");
         System.setProperty("webdriver.http.factory", "jdk-http-client");
         List<Integer> hltv_ids = dao.getAllHltvId();
-        for (int i = 0; i < hltv_ids.size(); i++) {
-            WebDriver webDriver_1 = new ChromeDriver();
-            webDriver_1.get("https://www.hltv.org/stats/players/" + hltv_ids.get(i) + url_tier_1);
-            Document document_1 = Jsoup.parse(webDriver_1.getPageSource());
-            Element titleElements_1 = document_1.selectFirst(parse_maps_numb);
-            Element titleElements_2 = document_1.selectFirst(parse_dpr);
-            Integer maps_tier_1;
-            double dpr_tier_1;
-            if (titleElements_1 == null){
-                maps_tier_1 = 0;
-                dpr_tier_1 = 0.0;
-            }
-            else {
-                maps_tier_1 = Integer.parseInt(titleElements_1.text());
-                dpr_tier_1 = Double.parseDouble(titleElements_2.text());
-            }
-            DprPlayer dprPlayer_tier1 = dao.getByIdDprPlayer_tier1(hltv_ids.get(i));
-            dprPlayer_tier1.setMaps_numb(maps_tier_1);
-            dprPlayer_tier1.setDpr(dpr_tier_1);
-            dao.saveDprPlayer(dprPlayer_tier1);
-            webDriver_1.quit();
-            WebDriver webDriver_2 = new ChromeDriver();
-            webDriver_2.get("https://www.hltv.org/stats/players/"+ hltv_ids.get(i) + url_tier_2);
-            Document document_2 = Jsoup.parse(webDriver_2.getPageSource());
-            Element titleElements_3 = document_2.selectFirst(parse_maps_numb);
-            Element titleElements_4 = document_2.selectFirst(parse_dpr);
-            Integer maps_tier_2;
-            double dpr_tier_2;
-            if (titleElements_3 == null){
-                maps_tier_2 = 0;
-                dpr_tier_2 = 0.0;
-            }
-            else {
-                maps_tier_2 = Integer.parseInt(titleElements_3.text());
-                dpr_tier_2 = Double.parseDouble(titleElements_4.text());
-            }
-            DprPlayer dprPlayer_tier2 = dao.getByIdDprPlayer_tier2(hltv_ids.get(i));
-            dprPlayer_tier2.setMaps_numb(maps_tier_2);
-            dprPlayer_tier2.setDpr(dpr_tier_2);
-            dao.saveDprPlayer(dprPlayer_tier2);
-            webDriver_2.quit();
+        short tier_1_id = 1;
+        short tier_2_id = 2;
+        for (int i = 0; i < 3; i++) {
+            parsingStatsForDpr(hltv_ids.get(i), tier_1_id, url_tier_1);
+            parsingStatsForDpr(hltv_ids.get(i), tier_2_id, url_tier_2);
         }
+        dprPlayerCalculationService.startDprPlayersCalculation();
+    }
+
+    void parsingStatsForDpr(Integer hltv_id, short tier, String url) {
+        WebDriver webDriver = new ChromeDriver();
+        webDriver.get("https://www.hltv.org/stats/players/" + hltv_id + url);
+        Document document = Jsoup.parse(webDriver.getPageSource());
+        Element titleElements_1 = document.selectFirst(parse_maps_numb);
+        Element titleElements_2 = document.selectFirst(parse_dpr);
+        int maps;
+        double dpr;
+        if (titleElements_1 == null){
+            maps = 0;
+            dpr = 0.0;
+        }
+        else {
+            maps = Integer.parseInt(titleElements_1.text());
+            dpr = Double.parseDouble(titleElements_2.text());
+        }
+        if (tier == 1) {
+            DprPlayer dprPlayer_tier1 = dao.getByIdDprPlayer_tier1(hltv_id);
+            dprPlayer_tier1.setMaps_numb(maps);
+            dprPlayer_tier1.setDpr(dpr);
+            dao.saveDprPlayer(dprPlayer_tier1);
+        }
+        else {
+            DprPlayer dprPlayer_tier2 = dao.getByIdDprPlayer_tier2(hltv_id);
+            dprPlayer_tier2.setMaps_numb(maps);
+            dprPlayer_tier2.setDpr(dpr);
+            dao.saveDprPlayer(dprPlayer_tier2);
+        }
+        webDriver.quit();
     }
 }

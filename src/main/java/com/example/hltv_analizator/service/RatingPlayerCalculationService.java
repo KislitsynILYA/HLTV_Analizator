@@ -3,7 +3,6 @@ package com.example.hltv_analizator.service;
 import com.example.hltv_analizator.dao.Repository;
 import com.example.hltv_analizator.entity.Parameter;
 import com.example.hltv_analizator.entity.RatingPlayer;
-import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,6 @@ public class RatingPlayerCalculationService {
 
     @Autowired
     private Repository dao;
-    @PostConstruct
     void startRatingPlayersCalculation(){
         List<Double> AllRating = dao.getAllRating();
         List<Integer> maps_numbs = dao.getAllMaps_numb();
@@ -46,8 +44,8 @@ public class RatingPlayerCalculationService {
     void calculationPointsForRating (Integer maps_numb, Parameter parameters, Double rating, Integer player_id, short tier){
 
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
-        Double points = -1.00;
-        Double coef_points = -1.00;
+        Double points;
+        Double coef_points;
 
         if (maps_numb < parameters.getMin_maps_numb()) {
             points = 0.00;

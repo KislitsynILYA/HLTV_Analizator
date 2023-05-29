@@ -3,7 +3,6 @@ package com.example.hltv_analizator.service;
 import com.example.hltv_analizator.dao.Repository;
 import com.example.hltv_analizator.entity.PlayerAchievement;
 import com.example.hltv_analizator.entity.PointsAchievement;
-import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,21 +16,21 @@ public class PlayerAchievementCalculationService {
 
     @Autowired
     private Repository dao;
-    @PostConstruct
+
     void startPlayerAchievementCalculation(){
         if (dao.playerAchievementIsEmpty()) {
             dao.updatePlayerAchievement();
         }
         List<Integer> player_ids = dao.getAllPlayerAchievement_ids();
         PointsAchievement pointsAchievement = dao.getPointsAchievement();
-        for (int i = 0; i < player_ids.size(); i++){
+        for (int i = 0; i < 3; i++){
             calculationPointsForAchievement(i, pointsAchievement);
         }
     }
 
     void calculationPointsForAchievement(int i, PointsAchievement pointsAchievement){
 
-        int points_achievements = 0;
+        int points_achievements;
 
         PlayerAchievement playerAchievement = dao.getNumbAchievements().get(i);
         points_achievements = playerAchievement.getMvp_numb() * pointsAchievement.getMvp_points() +

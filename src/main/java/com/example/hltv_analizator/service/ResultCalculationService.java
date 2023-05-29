@@ -10,7 +10,6 @@ import com.example.hltv_analizator.entity.PlayerAchievement;
 import com.example.hltv_analizator.entity.PlayoffRatingPlayer;
 import com.example.hltv_analizator.entity.RatingPlayer;
 import com.example.hltv_analizator.entity.Result;
-import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +23,17 @@ public class ResultCalculationService {
 
     @Autowired
     private Repository dao;
-    @PostConstruct
     void startResultCalculation(){
         List<Integer> player_ids = dao.getAllResult_ids();
         List<Short> coef_tiers = dao.getAllCoef_Tier();
-        for (int i = 0; i < player_ids.size(); i++){
+        for (int i = 0; i < 3; i++){
             calculationFullPointsForResult(player_ids.get(i), coef_tiers);
         }
     }
 
     void calculationFullPointsForResult(Integer player_id, List<Short> coef_tiers){
 
-        Double full_points = 0.0;
+        double full_points;
 
         RatingPlayer ratingPlayer_tier1 = dao.getByRatingPlayer_Id_tier1(player_id);
         RatingPlayer ratingPlayer_tier2 = dao.getByRatingPlayer_Id_tier2(player_id);
