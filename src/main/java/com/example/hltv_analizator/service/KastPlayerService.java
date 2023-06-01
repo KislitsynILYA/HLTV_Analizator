@@ -48,7 +48,7 @@ public class KastPlayerService {
         List<Integer> hltv_ids = dao.getAllHltvId();
         short tier_1_id = 1;
         short tier_2_id = 2;
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < hltv_ids.size(); i++) {
             parsingStatsForKast(hltv_ids.get(i), tier_1_id, url_tier_1);
             parsingStatsForKast(hltv_ids.get(i), tier_2_id, url_tier_2);
         }

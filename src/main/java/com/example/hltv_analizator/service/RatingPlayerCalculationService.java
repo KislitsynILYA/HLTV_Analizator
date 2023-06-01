@@ -18,6 +18,7 @@ public class RatingPlayerCalculationService {
 
     @Autowired
     private Repository dao;
+
     void startRatingPlayersCalculation(){
         List<Double> AllRating = dao.getAllRating();
         List<Integer> maps_numbs = dao.getAllMaps_numb();
@@ -41,6 +42,7 @@ public class RatingPlayerCalculationService {
             }
         }
     }
+
     void calculationPointsForRating (Integer maps_numb, Parameter parameters, Double rating, Integer player_id, short tier){
 
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
@@ -80,6 +82,5 @@ public class RatingPlayerCalculationService {
             ratingPlayer_tier_2.setCoef_points(coef_points_res);
             dao.saveRatingPlayer(ratingPlayer_tier_2);
         }
-
     }
 }

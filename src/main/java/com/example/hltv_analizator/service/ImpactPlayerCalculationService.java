@@ -15,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @Setter
 public class ImpactPlayerCalculationService {
+
     @Autowired
     private Repository dao;
 

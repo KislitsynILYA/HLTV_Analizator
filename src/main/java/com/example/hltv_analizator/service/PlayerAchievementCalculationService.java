@@ -23,7 +23,7 @@ public class PlayerAchievementCalculationService {
         }
         List<Integer> player_ids = dao.getAllPlayerAchievement_ids();
         PointsAchievement pointsAchievement = dao.getPointsAchievement();
-        for (int i = 0; i < 3; i++){
+        for (int i = 0; i < player_ids.size(); i++){
             calculationPointsForAchievement(i, pointsAchievement);
         }
     }

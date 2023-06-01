@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -23,10 +24,11 @@ public class ResultCalculationService {
 
     @Autowired
     private Repository dao;
+
     void startResultCalculation(){
         List<Integer> player_ids = dao.getAllResult_ids();
         List<Short> coef_tiers = dao.getAllCoef_Tier();
-        for (int i = 0; i < 3; i++){
+        for (int i = 0; i < player_ids.size(); i++){
             calculationFullPointsForResult(player_ids.get(i), coef_tiers);
         }
     }
@@ -50,19 +52,17 @@ public class ResultCalculationService {
         PlayerAchievement playerAchievement = dao.getByPlayerAchievement_Id(player_id);
         PlayoffRatingPlayer playoffRatingPlayer = dao.getByPlayoffRatingPlayer_Id(player_id);
 
-        full_points = ratingPlayer_tier1.getCoef_points() * coef_tiers.get(0) +
-                ratingPlayer_tier2.getCoef_points() * coef_tiers.get(1) +
-                adrPlayer_tier1.getCoef_points() * coef_tiers.get(0) +
-                adrPlayer_tier2.getCoef_points() * coef_tiers.get(1) +
-                dprPlayer_tier1.getCoef_points() * coef_tiers.get(0) +
-                dprPlayer_tier2.getCoef_points() * coef_tiers.get(1) +
-                impactPlayer_tier1.getCoef_points() * coef_tiers.get(0) +
-                impactPlayer_tier2.getCoef_points() * coef_tiers.get(1) +
-                kastPlayer_tier1.getCoef_points() * coef_tiers.get(0) +
-                kastPlayer_tier2.getCoef_points() * coef_tiers.get(1) +
-                kprPlayer_tier1.getCoef_points() * coef_tiers.get(0) +
-                kprPlayer_tier2.getCoef_points() * coef_tiers.get(1) +
-                playoffRatingPlayer.getCoef_points() * coef_tiers.get(0) +
+        full_points = (ratingPlayer_tier1.getCoef_points() + adrPlayer_tier1.getCoef_points() +
+                dprPlayer_tier1.getCoef_points() + impactPlayer_tier1.getCoef_points()  +
+                kastPlayer_tier1.getCoef_points() + kprPlayer_tier1.getCoef_points() +
+                playoffRatingPlayer.getCoef_points())
+                        * coef_tiers.get(0) +
+
+                (ratingPlayer_tier2.getCoef_points() + adrPlayer_tier2.getCoef_points() +
+                dprPlayer_tier2.getCoef_points() + impactPlayer_tier2.getCoef_points() +
+                kastPlayer_tier2.getCoef_points() + kprPlayer_tier2.getCoef_points())
+                        * coef_tiers.get(1) +
+
                 playerAchievement.getPoints();
 
         Result result_player = dao.getByResultPlayer_Id(player_id);

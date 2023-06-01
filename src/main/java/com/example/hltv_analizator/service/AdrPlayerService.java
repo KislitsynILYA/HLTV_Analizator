@@ -38,7 +38,7 @@ public class AdrPlayerService {
     @Value("${trace.parse_adr}")
     private String parse_adr;
 
-    void startAdrPlayers() throws InterruptedException {
+    void startAdrPlayers() {
         if (dao.adrPlayerIsEmpty()) {
             dao.updateAdrPlayer_tier1();
             dao.updateAdrPlayer_tier2();
@@ -48,7 +48,7 @@ public class AdrPlayerService {
         List<Integer> hltv_ids = dao.getAllHltvId();
         short tier_1_id = 1;
         short tier_2_id = 2;
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < hltv_ids.size(); i++) {
             parsingStatsForAdr(hltv_ids.get(i), tier_1_id, url_tier_1);
             parsingStatsForAdr(hltv_ids.get(i), tier_2_id, url_tier_2);
         }

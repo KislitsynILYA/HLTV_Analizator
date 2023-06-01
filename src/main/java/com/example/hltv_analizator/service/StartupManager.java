@@ -1,13 +1,11 @@
 package com.example.hltv_analizator.service;
 
-import com.example.hltv_analizator.controller.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @Component
 public class StartupManager implements ApplicationRunner {
@@ -45,10 +43,8 @@ public class StartupManager implements ApplicationRunner {
     @Autowired
     private ResultService resultService;
 
-    @Autowired
-    private Controller controller;
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) {
 
         playerService.startPlayers();
 
@@ -71,6 +67,5 @@ public class StartupManager implements ApplicationRunner {
         resultService.startResults();
 
         SpringApplication.exit(applicationContext, () -> 0);
-
     }
 }

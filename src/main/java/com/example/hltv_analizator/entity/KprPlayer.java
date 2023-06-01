@@ -26,7 +26,7 @@ import java.io.Serializable;
 @ToString
 @Entity
 @Table(name = "kpr_players")
-public class KprPlayer {
+public class KprPlayer implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

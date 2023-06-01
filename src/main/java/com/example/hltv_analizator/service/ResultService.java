@@ -48,7 +48,7 @@ public class ResultService {
         System.setProperty("webdriver.chrome.driver", "selenium\\chromedriver.exe");
         System.setProperty("webdriver.http.factory", "jdk-http-client");
         List<Integer> hltv_ids = dao.getAllHltvId();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < hltv_ids.size(); i++) {
             parsingInfoForResult(hltv_ids.get(i), url_tier_1);
         }
         resultCalculationService.startResultCalculation();
